@@ -17,17 +17,7 @@ void printiii(struct steck* St) {//приииииииииииииннннннн�
         struct Elem* ptr = St->top;
         if (ptr) {
             while (ptr) {
-                if(ptr->val == ')') {
-                    printf("(");
-                }
-                else if (ptr->val == '(')
-                {
-                    printf(")");
-                }
-                else
-                {
-                    printf("%c", ptr->val);
-                }
+                printf("%c", ptr->val);
                 ptr = ptr->nx;
             }
             printf("\n");
