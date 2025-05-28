@@ -126,15 +126,15 @@ bool check(char* string) { //основная
                 if (*ptrIx != ' ') {
                     if (*ptrIx == '(') {
                         count_skobki++;
-                        // Проверяем следующий символ после '('
-                        char* next = ptrIx + 1;
+                        char* next = ptrIx + 1; // 77jjjjuuukследующий символ после '('
                         while (*next == ' ') next++;
-                        if (*next == '*' || *next == '+' || *next == '-' || *next == '/' || *next == '=') {
+                        if (*next == '*' || *next == '+' || *next == '-' || *next == '/' || *next == '=' || *next == ')') {
                             flag1 = true; // оператор сразу после скобки - ошибка
                         }
                     }
                     else if (*ptrIx == ')') {
-                        if (count_skobki <= 0) {
+                        char* next = ptrIx + 1;
+                        if (count_skobki <= 0 || (*next == '(' )) {
                             flag1 = true;  // Лишняя закрывающая скобка
                         }
                         else {
@@ -172,8 +172,9 @@ bool check(char* string) { //основная
 
 int main()
 {
-    char str[] = "a+b*3-(3/9)";
-    //char str[] = "((a+b)*(c-d))/(e+f)";// с вложенными скобками
+    //char str[] = "a+b*3-(3/9)";
+    //char str[] = "(a+b*3-)(3/9)";
+    char str[] = "(((a+b)*(c-d))/)(e+f)";// с вложенными скобками
 
     //char str[] = "a+b*3-3/9";
     //char str[] = "";//ошибка
