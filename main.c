@@ -85,6 +85,7 @@ char seeTop(struct steck* St) {// посмотреть вершину
 
 bool check_v1_v2_v3(struct steck* St) {
     if (St && St->size >= 3) {
+
         char v1 = 0, v2 = 0, v3 = 0;
 
         pop(St, &v1); // тройку достал
@@ -118,46 +119,47 @@ bool check(char* string) { //основная
         char* ptrIx = string;
         struct steck* Steckk = (struct steck*)calloc(1, sizeof(struct steck));
         if (Steckk) {
-
-            int count_skobki = 0;
-            bool flag1 = false;
-
-            for(; *ptrIx && !flag1; ptrIx++) {
+            bool flag1 = true;
+            for (; *ptrIx && flag1; ptrIx++) {
                 if (*ptrIx != ' ') {
-                    if (*ptrIx == '(') {
-                        count_skobki++;
-                        char* next = ptrIx + 1; // 77jjjjuuukследующий символ после '('
-                        while (*next == ' ') next++;
-                        if (*next == '*' || *next == '+' || *next == '-' || *next == '/' || *next == '=' || *next == ')') {
-                            flag1 = true; // оператор сразу после скобки - ошибка
+                    if (*ptrIx == ')') {
+
+                        char tmp;
+                        while (Steckk->size > 0 && seeTop(Steckk) != '(') {
+                            if (!check_v1_v2_v3(Steckk)) {
+                                if (seeTop(Steckk) != 'R')
+                                {
+                                    flag1 = false;
+                                }
+                                pop(Steckk, &tmp);
+                            }
                         }
-                    }
-                    else if (*ptrIx == ')') {
-                        char* next = ptrIx + 1;
-                        if (count_skobki <= 0 || (*next == '(' )) {
-                            flag1 = true;  // Лишняя закрывающая скобка
+
+
+                        if (Steckk->size > 0 && seeTop(Steckk) == '(' && flag1) {
+                            pop(Steckk, &tmp);
+                            push(Steckk, 'R');
                         }
                         else {
-                            count_skobki--;
+                            flag1 = false;
                         }
                     }
-                    else {
+                    else
+                    {
                         push(Steckk, *ptrIx);
                     }
                 }
-            }
-            // Если есть незакрытые скобки или ошибка внутри них
-            if (flag1 || count_skobki != 0) {
-                clear(Steckk);
-                return false;
+                printf("for2   ");
+                printiii(Steckk);
             }
 
             printf("_____________________________________________________________________________\n");
             printf("in Steckk: ");
             printiii(Steckk);
             bool flag = true;
-            while ((Steckk->size > 1)&& flag) {
-                flag = check_v1_v2_v3(Steckk);
+            while ((Steckk->size > 1)&& flag1) {
+                flag1 = check_v1_v2_v3(Steckk);
+                printiii(Steckk);
             }
             if ((Steckk->size == 1) && (seeTop(Steckk) == 'R'))
             {
@@ -174,7 +176,8 @@ int main()
 {
     //char str[] = "a+b*3-(3/9)";
     //char str[] = "(a+b*3-)(3/9)";
-    char str[] = "(((a+b)*(c-d))/)(e+f)";// с вложенными скобками
+    //char str[] = "(((a+b)*(c-d))/)(e+f)";// с вложенными скобками
+    //char str[] = "( ( ( a + b ) * ( c - d ) ) / ) ( e + f )";// с вложенными скобками
 
     //char str[] = "a+b*3-3/9";
     //char str[] = "";//ошибка
@@ -185,7 +188,7 @@ int main()
     //char str[] = "2+b2*3-d/e";//ошибка
     //char str[] = "(a+b)*3-3/9)";//ошибка в скобках
     //bool check2 = check(NULL);//ошибка пустое
-    //char str[] = "()";//ошибка скобочки
+    char str[] = "(a)";//ошибка скобочки
     //char str[] = "a + b * 3 - 3 / 9"; //пробелы
     //char str[] = "a+b$c";//ошибка плохой символ
 
